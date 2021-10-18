@@ -1,6 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router";
 import { storage } from "../utils/storage";
+import { ageCalculator } from "../utils/ageCalculator";
 
 const StudentCard = () => {
   const history = useHistory();
@@ -23,7 +24,7 @@ const StudentCard = () => {
               </div>
               <div>
                 <span className="fw-bold">Год рождения: </span>
-                {student.yearOfBirth}
+                {student.yearOfBirth} ({ageCalculator(student.yearOfBirth)})
               </div>
               <div>
                 <span className="fw-bold">Портфолио: </span>
