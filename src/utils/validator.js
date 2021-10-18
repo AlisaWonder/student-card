@@ -12,8 +12,12 @@ export function validator(data, config) {
         break;
       }
       case "isYear": {
-        const yearRegExp = /(?:19|20)\d\d/g;
-        statusValidate = !yearRegExp.test(data);
+        const currentYear = new Date().getFullYear();
+        //   console.log(currentYear);
+        //   const yearRegExp = /(?:19|20)\d\d/g;
+        //   statusValidate = !yearRegExp.test(data) && currentYear < data;
+        statusValidate = currentYear < data || data < 1900; //от 1900 до настоящего времени
+        //   console.log("status ", statusValidate);
         break;
       }
       case "isLink": {

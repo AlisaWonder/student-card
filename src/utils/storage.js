@@ -1,4 +1,14 @@
-const myNumber = 42;
-console.log(localStorage.getItem("number"));
-localStorage.setItem("number", myNumber); //запись в localstorage
-console.log(localStorage.getItem("number"));
+const storage = {
+  get: (key) => {
+    if (localStorage.getItem(key)) {
+      return JSON.parse(localStorage.getItem(key));
+    }
+
+    return null;
+  },
+  save: (key, value) => {
+    localStorage.setItem(key, JSON.stringify(value));
+  },
+};
+
+export { storage };

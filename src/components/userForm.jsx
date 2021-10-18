@@ -2,18 +2,24 @@ import React, { useState } from "react";
 import { useEffect } from "react/cjs/react.development";
 import TextField from "./textField";
 import { validator } from "../utils/validator";
+import { storage } from "../utils/storage";
+import { useHistory } from "react-router";
+import Modal from "./modal";
 
 const UserForm = () => {
-  const [data, setData] = useState({
+  const [data] = useState({
     name: "",
     surname: "",
     yearOfBirth: "",
     portfolio: "",
   });
+  const history = useHistory();
   const [errors, setErrors] = useState({});
-
+  const isUser = storage.get("user");
+  const [user, setUser] = useState(isUser ? isUser : data);
+  const [showModal, setShowModal] = useState(false);
   const handleChange = ({ target }) => {
-    setData((prevState) => ({
+    setUser((prevState) => ({
       ...prevState,
       [target.name]: target.value,
     }));
@@ -50,9 +56,10 @@ const UserForm = () => {
 
   useEffect(() => {
     validate();
-  }, [data]);
+  }, [user]);
+
   const validate = () => {
-    const errors = validator(data, validatorConfig);
+    const errors = validator(user, validatorConfig);
 
     setErrors(errors);
     return Object.keys(errors).length === 0;
@@ -64,26 +71,34 @@ const UserForm = () => {
     e.preventDefault();
     const isValid = validate();
     if (!isValid) return;
-    console.log(data);
+    console.log(user);
+    storage.save("user", user);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    history.push("/");
   };
 
   return (
     <div className="container mt-5">
+      <Modal show={showModal} handleClose={handleCloseModal} />
       <div className="row">
         <div className="col-md-6 offset-md-3 shadow p-4">
-          <h3 className="mb-4">Создать</h3>
+          <h3 className="mb-4">{isUser ? "Редактировать" : "Создать"}</h3>
           <form onSubmit={handleSubmit}>
             <TextField
               label="Имя"
               name="name"
-              value={data.name}
+              value={user.name}
               onChange={handleChange}
               error={errors.name}
             />
             <TextField
               label="Фамилия"
               name="surname"
-              value={data.surname}
+              value={user.surname}
               onChange={handleChange}
               error={errors.surname}
             />
@@ -91,7 +106,7 @@ const UserForm = () => {
               label="Год рождения"
               type="number"
               name="yearOfBirth"
-              value={data.yearOfBirth}
+              value={user.yearOfBirth}
               onChange={handleChange}
               error={errors.yearOfBirth}
             />
@@ -99,16 +114,35 @@ const UserForm = () => {
               label="Портфолио"
               type="text"
               name="portfolio"
-              value={data.portfolio}
+              value={user.portfolio}
               onChange={handleChange}
               error={errors.portfolio}
             />
-            <button
+            {/* <button
               type="submit"
               disabled={!isValid}
               className="btn btn-primary w-100 mx-auto"
             >
               Подтвердить
+            </button> */}
+
+            {isUser && (
+              <button
+                type="button"
+                onClick={() => history.push("/")}
+                className="btn btn-secondary"
+              >
+                Назад
+              </button>
+            )}
+            <button
+              type="submit"
+              disabled={!isValid}
+              data-bs-toggle="modal"
+              data-bs-target="#staticBackdrop"
+              className="btn btn-primary"
+            >
+              {isUser ? "Обновить" : "Создать"}
             </button>
           </form>
         </div>
