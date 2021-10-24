@@ -7,7 +7,7 @@ import UserForm from "./components/userForm";
 function App() {
   return (
     <Router>
-      <Route path="/userform" component={UserForm} />
+      <Route path="student-card/userform" component={UserForm} />
       <Route exact path="/student-card/" component={StudentCard} />
     </Router>
   );
