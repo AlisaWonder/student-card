@@ -36,7 +36,7 @@ const StudentCard = () => {
           )}
           <button
             className="btn btn-primary"
-            onClick={() => history.push("/student-card/userform")}
+            onClick={() => history.push("/userform")}
           >
             {student ? "Редактировать" : "Добавить"}
           </button>
