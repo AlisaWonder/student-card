@@ -78,7 +78,7 @@ const UserForm = () => {
 
   const handleCloseModal = () => {
     setShowModal(false);
-    history.push("/");
+    history.push("/student-card/");
   };
 
   return (
@@ -129,7 +129,7 @@ const UserForm = () => {
             {isUser && (
               <button
                 type="button"
-                onClick={() => history.push("/")}
+                onClick={() => history.push("/student-card/")}
                 className="btn btn-secondary"
               >
                 Назад
